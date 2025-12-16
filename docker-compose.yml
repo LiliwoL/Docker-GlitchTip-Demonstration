@@ -11,6 +11,8 @@ x-depends_on: &default-depends_on
   - postgres
   - redis
 
+
+
 services:
   postgres:
     image: postgres:17
