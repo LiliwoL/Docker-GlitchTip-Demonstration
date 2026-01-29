@@ -1,9 +1,11 @@
+```
 ██████╗ ██╗     ██╗████████╗ ██████╗██╗  ██╗████████╗██╗██████╗
 ██╔════╝ ██║     ██║╚══██╔══╝██╔════╝██║  ██║╚══██╔══╝██║██╔══██╗
 ██║  ███╗██║     ██║   ██║   ██║     ███████║   ██║   ██║██████╔╝
 ██║   ██║██║     ██║   ██║   ██║     ██╔══██║   ██║   ██║██╔═══╝
 ╚██████╔╝███████╗██║   ██║   ╚██████╗██║  ██║   ██║   ██║██║     
 ╚═════╝ ╚══════╝╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝   ╚═╝   ╚═╝╚═╝
+```
 
 # Installation de GlitchTip
 
@@ -28,6 +30,7 @@ python -c 'import secrets; print(secrets.token_urlsafe(32))'
 
 - ALLOWED_HOSTS
 Définissez les noms de domaine ou adresses IP autorisés à accéder à l'application. Par exemple, si vous souhaitez autoriser l'accès à l'application depuis n'importe quelle adresse IP, vous pouvez définir la variable comme suit :
+
 ```bash
 ALLOWED_HOSTS=*
 ```
@@ -48,11 +51,15 @@ docker-compose up -d
 
 # Accès à l'application
 
-L'application est accessible à l'adresse suivante :
+L'application glitchtip est accessible à l'adresse suivante :
 
-http://localhost:8000
+http://localhost:8008
 
 ![](readme_docs/47da569b.png)
+
+L'application Python sera accesible à:
+
+http://localhost:5000 
 
 ---
 
@@ -107,9 +114,25 @@ Pour envoyer les erreurs à GlitchTip, vous devez installer la bibliothèque **s
 pip install sentry-sdk
 ```
 
+ou 
+```bash
+pip install -r requirements.txt
+```
+
+## Configuration
+
+L'application Python doit être configurée pour savoir où envoyer ses logs.
+La configuration se fait dans un fichier **.env**.
+
+Le fichier **.env.sample** donne un exemple.
+Copiez le fichier **.env.sample** et renommez le en **.env**.
+
+
 ## Utilisation dans l'application
 
+## Lancement
 
+docker compose up -d --force-recreate --build
 
 # Sources
 

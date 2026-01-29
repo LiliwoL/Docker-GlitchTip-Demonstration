@@ -14,8 +14,10 @@ x-depends_on: &default-depends_on
 
 
 services:
+  # Base de données PostgreSQL utilisée par GlitchTip
   postgres:
     image: postgres:17
+    container_name: glitchtip-postgres
     environment:
       POSTGRES_HOST_AUTH_METHOD: "trust" # Consider removing this and setting a password
     restart: unless-stopped
@@ -24,17 +26,21 @@ services:
     networks:
       - glitchtip
 
+  # Cache et broker léger (Redis) pour tâches asynchrones et mise en cache
   redis:
     image: valkey/valkey
+    container_name: glitchtip-redis
     restart: unless-stopped
     networks:
       - glitchtip
 
+  # Service web principal (application GlitchTip)
   web:
     image: glitchtip/glitchtip
+    container_name: glitchtip-web
     depends_on: *default-depends_on
     ports:
-      - "8000:8000"
+      - "8008:8000"
     environment: *default-environment
     restart: unless-stopped
     volumes:
@@ -42,8 +48,10 @@ services:
     networks:
       - glitchtip
 
+  # Worker Celery pour le traitement des tâches asynchrones
   worker:
     image: glitchtip/glitchtip
+    container_name: glitchtip-worker
     command: ./bin/run-celery-with-beat.sh
     depends_on: *default-depends_on
     environment: *default-environment
@@ -53,13 +61,26 @@ services:
     networks:
       - glitchtip
 
+  # Service pour exécuter les migrations de base de données
   migrate:
     image: glitchtip/glitchtip
+    container_name: glitchtip-migrate
     depends_on: *default-depends_on
     command: ./bin/run-migrate.sh
     environment: *default-environment
     networks:
-        - glitchtip
+      - glitchtip
+
+  # Application de démonstration: petit service Flask écoutant sur le port 5000
+  sample-flask-app:
+    build:
+      context: ./sample-flask-app
+    container_name: glitchip-flask-app
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    networks:
+      - glitchtip
 
 volumes:
   pg-data:
